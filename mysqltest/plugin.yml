@@ -1,0 +1,6 @@
+name: sqltest
+version: 1.0
+main: mysqltest.Main
+commands:
+   punkte:
+ 
