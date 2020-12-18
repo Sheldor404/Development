@@ -1,0 +1,5 @@
+name: Bootevent
+version: 1.0
+main: eventmain.Main
+commands: 
+   boatevent:

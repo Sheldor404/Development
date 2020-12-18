@@ -3,6 +3,7 @@ package mysqltest;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -81,5 +82,121 @@ public class MySQL {
             e.printStackTrace();
         }
     }
+    
+	public static void executecommand(String command) {
+		try {
+			Connection con = MySQL.getCon();
+			PreparedStatement cmd = con.prepareStatement(command);
+			cmd.executeUpdate();
+		}catch (SQLException e) {
+			System.out.println(e);	
+			}
+	}
+    
+		public ArrayList<Boolean> selectBoolean(String command, String spalte) {
+			try {
+				Connection con = MySQL.getCon();
+				PreparedStatement select = con.prepareStatement(command);
+				ResultSet res = select.executeQuery();
+				ArrayList<Boolean> array = new ArrayList<Boolean>();
+				while (res.next()) {
+					array.add(res.getBoolean(spalte));
+				}
+				return array;		
+			}catch (SQLException e) {
+				System.out.println(e);	
+				}
+			return null;
+		}
+    
+		public  ArrayList<Integer> selectInteger(String command, String spalte) {
+			try {
+				Connection con = MySQL.getCon();
+				PreparedStatement select = con.prepareStatement(command);
+				ResultSet res = select.executeQuery();
+				ArrayList<Integer> array = new ArrayList<Integer>();
+				while (res.next()) {
+					array.add(res.getInt(spalte));
+				}
+				return array;		
+			}catch (SQLException e) {
+				System.out.println(e);	
+				}
+			return null;
+		}
+    
+		public  ArrayList<Double> selectDouble(String command, String spalte) {
+			try {
+				Connection con = MySQL.getCon();
+				PreparedStatement select = con.prepareStatement(command);
+				ResultSet res = select.executeQuery();
+				ArrayList<Double> array = new ArrayList<Double>();
+				while (res.next()) {
+					array.add(res.getDouble(spalte));
+				}
+				return array;		
+			}catch (SQLException e) {
+				System.out.println(e);	
+				}
+			return null;
+		}
+		
+		public static ArrayList<String> selectString(String command, String spalte) {
+			try {
+				Connection con = MySQL.getCon();
+				PreparedStatement select = con.prepareStatement(command);
+				ResultSet res = select.executeQuery();
+				ArrayList<String> array = new ArrayList<String>();
+				while (res.next()) {
+					array.add(res.getString(spalte));
+				}
+				return array;		
+			}catch (SQLException e) {
+				System.out.println(e);	
+				}
+			return null;
+		}  
+    
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }
