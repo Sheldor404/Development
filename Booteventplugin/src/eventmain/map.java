@@ -10,6 +10,7 @@ public class map {
 	public map() {
 		 HashMap<Player, ArrayList<String>> map = new HashMap<>();
 		System.out.println("Test Test by Kyle");
+		System.out.println("2. edit");
 
 	}
 
