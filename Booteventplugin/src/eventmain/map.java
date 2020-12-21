@@ -8,9 +8,10 @@ import org.bukkit.entity.Player;
 public class map {
 
 	public map() {
-		 HashMap<Player, ArrayList<String>> map = new HashMap<>();
-		System.out.println("Test Test by Kyle");
-		System.out.println("2. edit");
+		HashMap<Player, ArrayList<String>> map = new HashMap<>();
+		/*
+		* Test Test Test
+		* */
 
 	}
 

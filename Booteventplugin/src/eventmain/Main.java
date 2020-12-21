@@ -31,7 +31,8 @@ static long starttime;
 int eventplayers =5 ;
 String bypass = "";
 static int currentplaying;
-	public void onEnable() {
+
+public void onEnable() {
 		Config file = new Config();
         file.setconfig();		
 		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),"kill @e[type=Boat]");
