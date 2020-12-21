@@ -34,15 +34,15 @@ static int playersinround = 1;
 static int currentplaying;
 
 public void onEnable() {
-		Config file = new Config();
+		/*Config file = new Config();
         file.setconfig();		
 		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),"kill @e[type=Boat]");
         plugin = this;
 		PluginManager plmanager = Bukkit.getPluginManager();
-		plmanager.registerEvents( this, this);
+		plmanager.registerEvents( this, this);*/
 	}
 
-public boolean onCommand(CommandSender sender, Command command, String lable, String[] args) {
+/*public boolean onCommand(CommandSender sender, Command command, String lable, String[] args) {
 	final Player player = (Player) sender;
 	if (command.getName().equalsIgnoreCase("boatevent")) {
 		if(args[0].equals("tptostart")) {
@@ -147,8 +147,5 @@ public static void bubblesrt(ArrayList<Long> list,ArrayList<Player> players){
 
 public static Main getPlugin() {
 	return plugin;
+}*/
 }
-}
-
-
-//I AM BACK
