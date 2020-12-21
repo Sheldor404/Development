@@ -122,6 +122,7 @@ public void joinevent(PlayerJoinEvent event) {
 public void quitevent(PlayerQuitEvent event) {
 	Player player = event.getPlayer();
 		if(willplay.contains(player)) willplay.remove(player);
+
 }
 
 public static void bubblesrt(ArrayList<Long> list,ArrayList<Player> players){
@@ -148,7 +149,3 @@ public static Main getPlugin() {
 }
 
 }
-
-/*
-* Edit by Kyleonaut
-* */

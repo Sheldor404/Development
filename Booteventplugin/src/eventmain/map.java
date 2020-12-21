@@ -9,8 +9,8 @@ public class map {
 
 	public map() {
 		 HashMap<Player, ArrayList<String>> map = new HashMap<>();
-		 System.out.println("Penis"
-		 );
+
+		 
 	}
 
 }
