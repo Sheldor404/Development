@@ -1,22 +1,13 @@
 package eventmain;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-
-import javax.naming.ldap.StartTlsRequest;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftBoat;
 import org.bukkit.entity.Boat;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -28,18 +19,18 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.minecraft.server.v1_12_R1.WorldGenEndCity.Start;
 
 public class Main extends JavaPlugin implements Listener{
 private static Main plugin;
 public static ArrayList<Player> allplayers = new ArrayList<Player>();
-public static ArrayList<Player> haveplayed = new ArrayList<Player>();
+public static ArrayList<UUID> haveplayed = new ArrayList<UUID>();
 public static ArrayList<Player> willplay = new ArrayList<Player>();
 public static ArrayList<Player> winners = new ArrayList<Player>();
 public static ArrayList<Long> times = new ArrayList<Long>();
 static long starttime;
 int eventplayers =5 ;
 String bypass = "";
+static int currentplaying;
 	public void onEnable() {
 		Config file = new Config();
         file.setconfig();		
@@ -49,7 +40,6 @@ String bypass = "";
 		plmanager.registerEvents( this, this);
 	}
 
-	
 public boolean onCommand(CommandSender sender, Command command, String lable, String[] args) {
 	final Player player = (Player) sender;
 	if (command.getName().equalsIgnoreCase("boatevent")) {
@@ -66,8 +56,8 @@ public boolean onCommand(CommandSender sender, Command command, String lable, St
 		}else if(args[0].equalsIgnoreCase("tpselected")) {
 			starttime = System.currentTimeMillis();
 			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),"kill @e[type=Boat]");
-			
-				for (int i = 0; i <= 2 && i <= willplay.size(); i++) {
+			int willplaysize = willplay.size();
+				for (int i = 0; i <= 2 && i < willplaysize; i++) {
 					if(willplay.size() > 0) {
 						int randomNum = ThreadLocalRandom.current().nextInt(0, willplay.size() );
 						Location loc = new Location(player.getWorld(),-3-2*i,65,45 );
@@ -75,9 +65,9 @@ public boolean onCommand(CommandSender sender, Command command, String lable, St
 						Boat boat = player.getWorld().spawn(loc, Boat.class);
 						boat.setCustomName("boat"+i);
 						boat.setPassenger(willplay.get(randomNum));
-						haveplayed.add(willplay.get(randomNum));
+						haveplayed.add(willplay.get(randomNum).getUniqueId());
 						willplay.remove(randomNum);
-						player.sendMessage(haveplayed + "  " + willplay + "  "+ haveplayed.contains(player));
+						currentplaying = i+1;
 					}
 				}
 			}
@@ -103,8 +93,9 @@ public static void boatmoveevent(VehicleMoveEvent event) {
 			player.sendMessage("target");
 			winners.add(player);
 			times.add( System.currentTimeMillis());
+			player.sendMessage(winners.size() + "  "+ willplay.size());
 		}
-		if(	winners.size() == 2 || winners.size() == willplay.size()){
+		if(	winners.size() == 1 || winners.size() == currentplaying){
 			bubblesrt(times, winners);
 			for (int i = 0; i < winners.size(); i++) {
 				winners.get(i).teleport(endloc);
@@ -119,9 +110,11 @@ public static void boatmoveevent(VehicleMoveEvent event) {
 @EventHandler
 public void joinevent(PlayerJoinEvent event) {
 	Player player = event.getPlayer();
-	player.sendMessage("" + haveplayed);
 	if(player.hasPermission(bypass)) {
-		if (!haveplayed.contains(player)) willplay.add(player);			
+		if (!haveplayed.contains(player.getUniqueId())) {
+			willplay.add(player);	
+			player.sendMessage(willplay+ "");
+		}
 	}
 }
 
