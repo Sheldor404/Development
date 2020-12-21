@@ -125,7 +125,7 @@ public void quitevent(PlayerQuitEvent event) {
 		if(willplay.contains(player)) willplay.remove(player);
 
 }
-
+//fbeiawfaw
 public static void bubblesrt(ArrayList<Long> list,ArrayList<Player> players){
 	for (int j = 0; j < list.size(); j++) {
 		
@@ -148,5 +148,4 @@ public static void bubblesrt(ArrayList<Long> list,ArrayList<Player> players){
 public static Main getPlugin() {
 	return plugin;
 }
-
 }
