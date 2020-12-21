@@ -89,8 +89,7 @@ public static void boatmoveevent(VehicleMoveEvent event) {
 		if ( Config.cfg.getInt("checkx1")  <= x && x <= Config.cfg.getInt("checkx2") && Config.cfg.getInt("checkz1") <= z && z <= Config.cfg.getInt("checkz2")) {
 			members.members.put(player, true);
 		}
-		if ( Config.cfg.getInt("targetx1") <= x && x <= Config.cfg.getInt("targetx2") && Config.cfg.getInt("targetz1") <= z && z <= Config.cfg.getInt("targetz2") && members.members.get(player)) {
-			player.sendMessage("target");
+		if ( Config.cfg.getInt("targetx1") <= x && x <= Config.cfg.getInt("targetx2") && Config.cfg.getInt("targetz1") <= z && z <= Config.cfg.getInt("targetz2") && members.members.get(player) && !winners.contains(player)) {
 			winners.add(player);
 			times.add( System.currentTimeMillis());
 			player.sendMessage(winners.size() + "  "+ willplay.size());
