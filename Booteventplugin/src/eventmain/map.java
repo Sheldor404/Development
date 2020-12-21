@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 public class map {
 //testeifwahofsd
 	public map() {
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 		 HashMap<Player, ArrayList<String>> map = new HashMap<>();
 		System.out.println("Test Test by Kyle");
 		

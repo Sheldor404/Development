@@ -30,6 +30,7 @@ public static ArrayList<Long> times = new ArrayList<Long>();
 static long starttime;
 int eventplayers =5 ;
 String bypass = "";
+static int playersinround = 1;
 static int currentplaying;
 
 public void onEnable() {
@@ -58,7 +59,7 @@ public boolean onCommand(CommandSender sender, Command command, String lable, St
 			starttime = System.currentTimeMillis();
 			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),"kill @e[type=Boat]");
 			int willplaysize = willplay.size();
-				for (int i = 0; i <= 2 && i < willplaysize; i++) {
+				for (int i = 0; i < playersinround && i < willplaysize; i++) {
 					if(willplay.size() > 0) {
 						int randomNum = ThreadLocalRandom.current().nextInt(0, willplay.size() );
 						Location loc = new Location(player.getWorld(),-3-2*i,65,45 );
@@ -93,9 +94,9 @@ public static void boatmoveevent(VehicleMoveEvent event) {
 		if ( Config.cfg.getInt("targetx1") <= x && x <= Config.cfg.getInt("targetx2") && Config.cfg.getInt("targetz1") <= z && z <= Config.cfg.getInt("targetz2") && members.members.get(player) && !winners.contains(player)) {
 			winners.add(player);
 			times.add( System.currentTimeMillis());
-			player.sendMessage(winners.size() + "  "+ willplay.size());
 		}
-		if(	winners.size() == 1 || winners.size() == currentplaying){
+		if(winners.size() == currentplaying){
+			
 			bubblesrt(times, winners);
 			for (int i = 0; i < winners.size(); i++) {
 				winners.get(i).teleport(endloc);
