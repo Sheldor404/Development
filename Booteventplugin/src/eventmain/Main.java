@@ -148,4 +148,11 @@ public static void bubblesrt(ArrayList<Long> list,ArrayList<Player> players){
 public static Main getPlugin() {
 	return plugin;
 }
+<<<<<<< HEAD
 }
+=======
+}
+
+//Kyle war nochmal hier um 23:31
+//Ich war über Github da um 23:33
+>>>>>>> branch 'master' of https://github.com/Sheldor404/Development.git
