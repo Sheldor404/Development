@@ -33,7 +33,7 @@ public void setconfig(){
     cfg.addDefault("checkx2",0);
     cfg.addDefault("checkz2",0);
 
-
+    
     try {
         cfg.save(getFile());
     } catch (IOException e) {
