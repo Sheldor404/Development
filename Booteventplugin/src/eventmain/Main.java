@@ -125,8 +125,7 @@ public void quitevent(PlayerQuitEvent event) {
 		if(willplay.contains(player)) willplay.remove(player);
 
 }
-//fbeiawfaw
-//dawdwd
+
 public static void bubblesrt(ArrayList<Long> list,ArrayList<Player> players){
 	for (int j = 0; j < list.size(); j++) {
 		
