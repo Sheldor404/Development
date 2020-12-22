@@ -30,19 +30,19 @@ public static ArrayList<Long> times = new ArrayList<Long>();
 static long starttime;
 int eventplayers =5 ;
 String bypass = "";
-static int playersinround = 1;
+static int playersinround = Config.cfg.getInt("spieleranzahl"); 
 static int currentplaying;
 
 public void onEnable() {
-		/*Config file = new Config();
+		Config file = new Config();
         file.setconfig();		
 		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),"kill @e[type=Boat]");
         plugin = this;
 		PluginManager plmanager = Bukkit.getPluginManager();
-		plmanager.registerEvents( this, this);*/
+		plmanager.registerEvents( this, this);
 	}
 
-/*public boolean onCommand(CommandSender sender, Command command, String lable, String[] args) {
+public boolean onCommand(CommandSender sender, Command command, String lable, String[] args) {
 	final Player player = (Player) sender;
 	if (command.getName().equalsIgnoreCase("boatevent")) {
 		if(args[0].equals("tptostart")) {
@@ -62,7 +62,7 @@ public void onEnable() {
 				for (int i = 0; i < playersinround && i < willplaysize; i++) {
 					if(willplay.size() > 0) {
 						int randomNum = ThreadLocalRandom.current().nextInt(0, willplay.size() );
-						Location loc = new Location(player.getWorld(),-3-2*i,65,45 );
+						Location loc = new Location(player.getWorld(),Config.cfg.getInt("gamestartx")-2*i,Config.cfg.getInt("gamestarty"),Config.cfg.getInt("gamestartz") );
 						loc.setYaw(180);
 						Boat boat = player.getWorld().spawn(loc, Boat.class);
 						boat.setCustomName("boat"+i);
@@ -147,5 +147,5 @@ public static void bubblesrt(ArrayList<Long> list,ArrayList<Player> players){
 
 public static Main getPlugin() {
 	return plugin;
-}*/
+}
 }
