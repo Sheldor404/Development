@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -27,16 +28,19 @@ public static ArrayList<UUID> haveplayed = new ArrayList<UUID>();
 public static ArrayList<Player> willplay = new ArrayList<Player>();
 public static ArrayList<Player> winners = new ArrayList<Player>();
 public static ArrayList<Long> times = new ArrayList<Long>();
+public static ArrayList<Player> currentlyplaying = new ArrayList<Player>();
 static long starttime;
 int eventplayers =5 ;
 String bypass = "";
+public static Location endloc;
 static int playersinround = Config.cfg.getInt("spieleranzahl"); 
-static int currentplaying;
 
 public void onEnable() {
 		Config file = new Config();
         file.setconfig();		
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),"kill @e[type=Boat]");
+        for(Entity e : Bukkit.getServer().getWorlds().get(0).getEntities()) {
+			  if(e instanceof Boat) e.remove();
+			}  
         plugin = this;
 		PluginManager plmanager = Bukkit.getPluginManager();
 		plmanager.registerEvents( this, this);
@@ -44,6 +48,8 @@ public void onEnable() {
 
 public boolean onCommand(CommandSender sender, Command command, String lable, String[] args) {
 	final Player player = (Player) sender;
+	 endloc = new Location(player.getWorld(), Config.cfg.getInt("endx"), Config.cfg.getInt("endy"), Config.cfg.getInt("endz"));
+
 	if (command.getName().equalsIgnoreCase("boatevent")) {
 		if(args[0].equals("tptostart")) {
 			
@@ -57,8 +63,10 @@ public boolean onCommand(CommandSender sender, Command command, String lable, St
 			
 		}else if(args[0].equalsIgnoreCase("tpselected")) {
 			starttime = System.currentTimeMillis();
-			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),"kill @e[type=Boat]");
-			int willplaysize = willplay.size();
+			 for(Entity e : Bukkit.getServer().getWorlds().get(0).getEntities()) {
+				  if(e instanceof Boat) e.remove();
+				}  
+			 	int willplaysize = willplay.size();
 				for (int i = 0; i < playersinround && i < willplaysize; i++) {
 					if(willplay.size() > 0) {
 						int randomNum = ThreadLocalRandom.current().nextInt(0, willplay.size() );
@@ -68,11 +76,33 @@ public boolean onCommand(CommandSender sender, Command command, String lable, St
 						boat.setCustomName("boat"+i);
 						boat.setPassenger(willplay.get(randomNum));
 						haveplayed.add(willplay.get(randomNum).getUniqueId());
+						currentlyplaying.add(willplay.get(randomNum));
 						willplay.remove(randomNum);
-						currentplaying = i+1;
 					}
 				}
+			}else if(args[0].equalsIgnoreCase("test")) {
+				haveplayed.clear();
+				willplay.addAll(Bukkit.getOnlinePlayers());
+			}else if(args[0].equalsIgnoreCase("stop")) {
+				bubblesrt(times, winners);
+				for (int i = 0; i < winners.size(); i++) {
+					Bukkit.broadcastMessage("Platz "+(i+1) +" geht an " + winners.get(i).getName() + " mit " + Math.round(((times.get(i)-starttime)/1000)) + " sekunden"); 	
+				}
+				for (int i = 0; i < currentlyplaying.size(); i++) {
+					if (!winners.contains(currentlyplaying.get(i))) {
+						currentlyplaying.get(i).teleport(endloc);
+					}
+				}
+				for(Entity e : Bukkit.getServer().getWorlds().get(0).getEntities()) {
+					  if(e instanceof Boat) e.remove();
+					} 
+				winners.clear();
+				times.clear();
+				currentlyplaying.clear();
+				members.members.clear();
 			}
+
+		
 		}
 	return false;
 	}
@@ -84,7 +114,6 @@ public static void boatmoveevent(VehicleMoveEvent event) {
 	if (event.getVehicle().getType().equals(EntityType.BOAT)) {
 		Player player =(Player) event.getVehicle().getPassenger();
 		Vehicle vehicle = event.getVehicle();
-		Location endloc = new Location(player.getWorld(), Config.cfg.getInt("endx"), Config.cfg.getInt("endy"), Config.cfg.getInt("endz"));
 
 		int x = vehicle.getLocation().getBlockX();
 		int z = vehicle.getLocation().getBlockZ();
@@ -92,18 +121,21 @@ public static void boatmoveevent(VehicleMoveEvent event) {
 			members.members.put(player, true);
 		}
 		if ( Config.cfg.getInt("targetx1") <= x && x <= Config.cfg.getInt("targetx2") && Config.cfg.getInt("targetz1") <= z && z <= Config.cfg.getInt("targetz2") && members.members.get(player) && !winners.contains(player)) {
+			player.teleport(endloc);
 			winners.add(player);
 			times.add( System.currentTimeMillis());
+			vehicle.remove();
 		}
-		if(winners.size() == currentplaying){
-			
+		if(winners.size() == currentlyplaying.size()){
 			bubblesrt(times, winners);
 			for (int i = 0; i < winners.size(); i++) {
-				winners.get(i).teleport(endloc);
-				Bukkit.broadcastMessage(i+" " + winners.get(i) + " " + (times.get(i)-starttime));
+				Bukkit.broadcastMessage("Platz "+(i+1) +" geht an " + winners.get(i).getName() + " mit " + Math.round(((times.get(i)-starttime)/1000)) + " sekunden"); 	
+			}
 			winners.clear();
 			times.clear();
-			}
+			currentlyplaying.clear();
+			members.members.clear();
+
 		}	
 	}
 }
@@ -143,7 +175,6 @@ public static void bubblesrt(ArrayList<Long> list,ArrayList<Player> players){
 		}    		
 	}
 }
-
 
 public static Main getPlugin() {
 	return plugin;
