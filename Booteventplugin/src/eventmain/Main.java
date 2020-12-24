@@ -31,7 +31,7 @@ public static ArrayList<Long> times = new ArrayList<Long>();
 public static ArrayList<Player> currentlyplaying = new ArrayList<Player>();
 static long starttime;
 int eventplayers =5 ;
-String bypass = "";
+static String bypass = "";
 public static Location endloc;
 static int playersinround = Config.cfg.getInt("spieleranzahl"); 
 
@@ -44,17 +44,22 @@ public void onEnable() {
         plugin = this;
 		PluginManager plmanager = Bukkit.getPluginManager();
 		plmanager.registerEvents( this, this);
-	}
+		plmanager.registerEvents(new onClickGuiInteract(),this);
+		plmanager.registerEvents(new inventory(),this);
+
+}
 
 public boolean onCommand(CommandSender sender, Command command, String lable, String[] args) {
 	final Player player = (Player) sender;
 	 endloc = new Location(player.getWorld(), Config.cfg.getInt("endx"), Config.cfg.getInt("endy"), Config.cfg.getInt("endz"));
+	Location startloc = new Location(player.getWorld(), Config.cfg.getInt("startx"), Config.cfg.getInt("starty"), Config.cfg.getInt("startz"));
 
 	if (command.getName().equalsIgnoreCase("boatevent")) {
+		if(args.length == 0)inventory.openGUI(player, "Boatevent");
+		if(args.length == 1) {
 		if(args[0].equals("tptostart")) {
 			
 			allplayers.addAll(Bukkit.getOnlinePlayers());
-			Location startloc = new Location(player.getWorld(), 5, 70, 5);		
 			for (int i = 0; i < allplayers.size(); i++) {
 				if(allplayers.get(i).hasPermission(bypass)) {
 					allplayers.get(i).teleport(startloc);
@@ -80,9 +85,11 @@ public boolean onCommand(CommandSender sender, Command command, String lable, St
 						willplay.remove(randomNum);
 					}
 				}
+				
 			}else if(args[0].equalsIgnoreCase("test")) {
 				haveplayed.clear();
 				willplay.addAll(Bukkit.getOnlinePlayers());
+				
 			}else if(args[0].equalsIgnoreCase("stop")) {
 				bubblesrt(times, winners);
 				for (int i = 0; i < winners.size(); i++) {
@@ -101,7 +108,7 @@ public boolean onCommand(CommandSender sender, Command command, String lable, St
 				currentlyplaying.clear();
 				members.members.clear();
 			}
-
+		}
 		
 		}
 	return false;
@@ -120,11 +127,13 @@ public static void boatmoveevent(VehicleMoveEvent event) {
 		if ( Config.cfg.getInt("checkx1")  <= x && x <= Config.cfg.getInt("checkx2") && Config.cfg.getInt("checkz1") <= z && z <= Config.cfg.getInt("checkz2")) {
 			members.members.put(player, true);
 		}
+		if(members.members.containsKey(player)) {
 		if ( Config.cfg.getInt("targetx1") <= x && x <= Config.cfg.getInt("targetx2") && Config.cfg.getInt("targetz1") <= z && z <= Config.cfg.getInt("targetz2") && members.members.get(player) && !winners.contains(player)) {
 			player.teleport(endloc);
 			winners.add(player);
 			times.add( System.currentTimeMillis());
 			vehicle.remove();
+		}
 		}
 		if(winners.size() == currentlyplaying.size()){
 			bubblesrt(times, winners);
